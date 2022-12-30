@@ -4,10 +4,11 @@ Bingx开发者文档([English Docs](./Perpetual_Swap_API_Documentation.md))。
 
 <!-- TOC -->
 - [介绍](#介绍)
+- [接口说明](#接口说明)
 - [签名认证](#签名认证)
   - [创建API](#创建api)
+  - [权限设置](#权限设置)
   - [请求内容](#请求内容)
-  - [接口说明](#接口说明)
   - [签名说明](#签名说明)
   - [请求交互](#请求交互)
 - [基础信息](#基础信息)
@@ -55,7 +56,7 @@ Bingx开发者文档([English Docs](./Perpetual_Swap_API_Documentation.md))。
 
 欢迎使用[Bingx](https://bingx.com)开发者文档。
 
-本文档提供了专业合约交易业务的账户管理、行情查询、交易功能等相关API的使用方法介绍。
+本文档提供了永续合约交易业务的账户管理、行情查询、交易功能等相关API的使用方法介绍。
 行情API提供市场的公开的行情数据接口，账户和交易API需要身份验证，提供下单、撤单，查询订单和帐户信息等功能。
 
 
@@ -75,7 +76,7 @@ API key和Secret key
 ```
  如果不小心泄露了API key，请立刻删除此API key, 并可以另外生产新的API key.
 ```
-## API Key 权限设置
+## 权限设置
 * 新创建的API的默认权限是 只读。
 * 如果需要通过API进行下单交易等写操作，需要在UI修改为对应权限。
 
@@ -108,14 +109,14 @@ secretKey = mheO6dR8ovSsxZQCOYEFCtelpuxcWGTfHw7te326y6jOwq5WpvFQ9JNljoTwBXZGv5It
 1. 对接口参数进行拼接: symbol=BTC-USDT&timestamp=1667872120843&side=LONG&leverage=6
 2. 对拼接好的参数字符串使用secretKey生成签名: 4f581ecdb1fa09b9d6e57886b6f70cffed17f82b93399722939e49a38edec2bf
    echo -n "symbol=BTC-USDT&timestamp=1667872120843&side=LONG&leverage=6" | openssl dgst -sha256 -hmac "mheO6dR8ovSsxZQCOYEFCtelpuxcWGTfHw7te326y6jOwq5WpvFQ9JNljoTwBXZGv5It07m9RXSPpDQEK2w" -hex
-3. 发送请求: curl -H 'X-BX-APIKEY: hO6oQotzTE0S5FRYze2Jx2wGx7eVnJGMolpA1nZyehsoMgCcgKNWQHd4QgTFZuwl4Zt4xMe2PqGBegWXO4A' 'https://pre-open-api.yunzhonghui.vip/openApi/swap/v2/trade/leverage?symbol=BTC-USDT&timestamp=1667872120843&side=LONG&leverage=6&signature=4f581ecdb1fa09b9d6e57886b6f70cffed17f82b93399722939e49a38edec2bf'
+3. 发送请求: curl -H 'X-BX-APIKEY: hO6oQotzTE0S5FRYze2Jx2wGx7eVnJGMolpA1nZyehsoMgCcgKNWQHd4QgTFZuwl4Zt4xMe2PqGBegWXO4A' 'https://open-api.bingx.com/openApi/swap/v2/trade/leverage?symbol=BTC-USDT&timestamp=1667872120843&side=LONG&leverage=6&signature=4f581ecdb1fa09b9d6e57886b6f70cffed17f82b93399722939e49a38edec2bf'
 ```
 - 参数通过`request body`发送示例
 ```
 1. 对接口参数进行拼接: symbol=BTC-USDT&timestamp=1667872120843&side=LONG&leverage=6
 2. 对拼接好的参数字符串使用secretKey生成签名: 4f581ecdb1fa09b9d6e57886b6f70cffed17f82b93399722939e49a38edec2bf
    echo -n "symbol=BTC-USDT&timestamp=1667872120843&side=LONG&leverage=6" | openssl dgst -sha256 -hmac "mheO6dR8ovSsxZQCOYEFCtelpuxcWGTfHw7te326y6jOwq5WpvFQ9JNljoTwBXZGv5It07m9RXSPpDQEK2w" -hex
-3. 发送请求: curl -H 'X-BX-APIKEY: hO6oQotzTE0S5FRYze2Jx2wGx7eVnJGMolpA1nZyehsoMgCcgKNWQHd4QgTFZuwl4Zt4xMe2PqGBegWXO4A' -X POST 'https://pre-open-api.yunzhonghui.vip/openApi/swap/v2/trade/leverage' -d 'symbol=BTC-USDT&timestamp=1667872120843&side=LONG&leverage=6&signature=4f581ecdb1fa09b9d6e57886b6f70cffed17f82b93399722939e49a38edec2bf'
+3. 发送请求: curl -H 'X-BX-APIKEY: hO6oQotzTE0S5FRYze2Jx2wGx7eVnJGMolpA1nZyehsoMgCcgKNWQHd4QgTFZuwl4Zt4xMe2PqGBegWXO4A' -X POST 'https://open-api.bingx.com/openApi/swap/v2/trade/leverage' -d 'symbol=BTC-USDT&timestamp=1667872120843&side=LONG&leverage=6&signature=4f581ecdb1fa09b9d6e57886b6f70cffed17f82b93399722939e49a38edec2bf'
 ```
 - 参数通过`query string`和`request body`发送示例
 ```
@@ -125,10 +126,10 @@ requestBody: side=LONG&leverage=6
 1. 对接口参数进行拼接: symbol=BTC-USDT&timestamp=1668159715051side=LONG&leverage=6
 2. 对拼接好的参数字符串使用secretKey生成签名: 8b756b01e7a30f02e19c58a91ab01b29528694316b08a51ecb8dd072942bd47d
    echo -n "symbol=BTC-USDT&timestamp=1668159715051side=LONG&leverage=6" | openssl dgst -sha256 -hmac "mheO6dR8ovSsxZQCOYEFCtelpuxcWGTfHw7te326y6jOwq5WpvFQ9JNljoTwBXZGv5It07m9RXSPpDQEK2w" -hex
-3. 发送请求: curl -H 'X-BX-APIKEY: hO6oQotzTE0S5FRYze2Jx2wGx7eVnJGMolpA1nZyehsoMgCcgKNWQHd4QgTFZuwl4Zt4xMe2PqGBegWXO4A' -X POST 'https://pre-open-api.yunzhonghui.vip/openApi/swap/v2/trade/leverage?symbol=BTC-USDT&timestamp=1668159715051&signature=8b756b01e7a30f02e19c58a91ab01b29528694316b08a51ecb8dd072942bd47d' -d 'side=LONG&leverage=6'
+3. 发送请求: curl -H 'X-BX-APIKEY: hO6oQotzTE0S5FRYze2Jx2wGx7eVnJGMolpA1nZyehsoMgCcgKNWQHd4QgTFZuwl4Zt4xMe2PqGBegWXO4A' -X POST 'https://open-api.bingx.com/openApi/swap/v2/trade/leverage?symbol=BTC-USDT&timestamp=1668159715051&signature=8b756b01e7a30f02e19c58a91ab01b29528694316b08a51ecb8dd072942bd47d' -d 'side=LONG&leverage=6'
 ```
 
-## 请求交互
+## 请求交互  
 
 REST访问的根URL：`https://open-api.bingx.com`
 
@@ -236,11 +237,13 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 | serverTime | int64  | 系统当前时间，单位毫秒 |
 
 ```javascript
-    {
-        "code": 0,
-        "msg": "",
-        "serverTime": 1534431933321
-    }
+{
+  "code": 0,
+  "msg": "",
+  "data": {
+  "serverTime": 1672025091160
+  }
+}
 ```
 
 # 行情接口
@@ -276,50 +279,39 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 | maxShortLeverage  | int     |    空头交易的最大杠杆倍数    |
 
 ```json
+{
+  "code": 0,
+  "msg": "",
+  "data": [
     {
-        "code": 0, 
-        "msg": "", 
-        "data": [{
-          "contractId": "1",
-          "symbol": "BTC-USDT",
-          "size": "0.0001",
-          "quantityPrecision": 4,
-          "pricePrecision": 1,
-          "feeRate": 0.0004,
-          "tradeMinLimit": 1,
-          "maxLongLeverage": 150,
-          "maxShortLeverage": 150,
-          "currency": "USDT",
-          "asset": "BTC",
-          "status": 1
-        }, {
-          "contractId": "2",
-          "symbol": "ETH-USDT",
-          "size": "0.01",
-          "quantityPrecision": 2,
-          "pricePrecision": 2,
-          "feeRate": 0.0004,
-          "tradeMinLimit": 1,
-          "maxLongLeverage": 125,
-          "maxShortLeverage": 125,
-          "currency": "USDT",
-          "asset": "ETH",
-          "status": 1
-        }, {
-          "contractId": "46",
-          "symbol": "LTC-USDT",
-          "size": "0.01",
-          "quantityPrecision": 6,
-          "pricePrecision": 0,
-          "feeRate": 0.0004,
-          "tradeMinLimit": 1,
-          "maxLongLeverage": 150,
-          "maxShortLeverage": 150,
-          "currency": "USDT",
-          "asset": "LTC",
-          "status": 1
-        }]
+      "contractId": "100",
+      "symbol": "BTC-USDT",
+      "size": "0.0001",
+      "quantityPrecision": 4,
+      "pricePrecision": 1,
+      "feeRate": 0.0005,
+      "tradeMinLimit": 1,
+      "maxLongLeverage": 150,
+      "maxShortLeverage": 150,
+      "currency": "USDT",
+      "asset": "BTC",
+      "status": 1
+    },
+    {
+      "contractId": "101",
+      "symbol": "ETH-USDT",
+      "size": "0.01",
+      "quantityPrecision": 2,
+      "pricePrecision": 2,
+      "feeRate": 0.0005,
+      "tradeMinLimit": 1,
+      "maxLongLeverage": 125,
+      "maxShortLeverage": 125,
+      "currency": "USDT",
+      "asset": "ETH",
+      "status": 1
     }
+}
 ```
 
 ## 2. 最新价格
@@ -347,15 +339,15 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 | time   | int64  | 撮合引擎时间 |
 
 ```javascript
-    {
-        "code": 0,
-        "msg": "",
-        "data": {
-          "symbol": "BTC-USDT",
-          "price": "50000.18",
-          "time": 1689437530011
-        }
-    }
+{
+  "code": 0,
+  "msg": "",
+  "data": {
+    "symbol": "BTC-USDT",
+    "price": "16882.0",
+    "time": 1672025339378
+  }
+}
 ```
 ## 3. 深度信息
 
@@ -382,34 +374,57 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 
 
 ```javascript
-    {
-        "code": 0,
-        "msg": "",
-        "data": {
-            "T": 1666347752072
-            "asks": [
-                [
-                5319.94, //价格
-                0.05483456 //数量
-              ],[
-                5320.19, //价格
-                1.05734545 //数量
-              ],[
-                5320.39,
-                1.16307999
-              ],
+{
+  "code": 0,
+    "msg": "",
+    "data": {
+        "T": 1672025377603,
+        "bids": [
+            [
+              "16880.50000000",
+              "1083739.00000000"
             ],
-            "bids": [
-              [
-                5319.93,
-                0.05483456
-              ],[
-                5318.19,
-                1.05734545
-              ]
+            [
+              "16880.00000000",
+              "851709.00000000"
             ],
-        }
-    }
+            [
+              "16879.50000000",
+              "359692.00000000"
+            ],
+            [
+              "16879.00000000",
+              "56341.00000000"
+            ],
+            [
+              "16878.50000000",
+              "368408.00000000"
+            ]
+        ],
+        "asks": [
+            [
+              "16881.00000000",
+              "1518457.00000000"
+            ],
+            [
+              "16881.50000000",
+              "1.00000000"
+            ],
+            [
+              "16882.00000000",
+              "960717.00000000"
+            ],
+            [
+              "16882.50000000",
+              "8.00000000"
+            ],
+            [
+              "16883.00000000",
+              "948166.00000000"
+            ]
+        ]
+  }
+}
 ```
 
 ## 4. 近期成交
@@ -438,26 +453,26 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 | quoteQty    | string | 成交额                        |
 
 ```javascript
+{
+  "code":0,
+  "msg":"",
+  "data":[
     {
-        "code": 0,
-        "msg": "",
-        "data": [
-                {
-                    "time": "2018-04-25T15:00:51.999Z",
-                    "isBuyerMaker": true,
-                    "price": 0.279563,
-                    "qty": "100",
-                    "quoteQty": "27.9563",
-                },
-                {
-                  "time": "2018-04-25T15:00:51.999Z",
-                  "isBuyerMaker": true,
-                  "price": 0.279563,
-                  "qty": "100",
-                  "quoteQty": "27.9563",
-                }
-        ]
+      "time": 1672025549368,
+      "isBuyerMaker": true,
+      "price": "16885.0",
+      "qty": "3.3002",
+      "quoteQty": "55723.87"
+    },
+    {
+      "time": 1672025549368,
+      "isBuyerMaker": false,
+      "price": "16884.0",
+      "qty": "1.9190",
+      "quoteQty": "32400.40"
     }
+  ]
+}
 ```
 
 ## 5. 最新标记价格和资金费率
@@ -485,17 +500,26 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 | nextFundingTime | int64  | 下次结算剩余时间，单位为毫秒 |
 
 ```javascript
+{
+  "code":0,
+  "msg":"",
+  "data":[
     {
-        "code": 0,
-        "msg": "",
-        "data": [
-            "symbol": "BTC-USDT"
-            "lastFundingRate": "0.3000",
-            "markPrice": "182.90",              // 标记价格
-            "indexPrice": "11781.80495970",     // 指数价格
-            "nextFundingTime": 1670636400000,
-        ]
+      "symbol": "BTC-USDT",
+      "markPrice": "16884.5",
+      "indexPrice": "16886.9",
+      "lastFundingRate": "0.0001",
+      "nextFundingTime": 1672041600000
+    },
+    {
+      "symbol": "ETH-USDT",
+      "markPrice": "1220.94",
+      "indexPrice": "1220.68",
+      "lastFundingRate": "-0.0001",
+      "nextFundingTime": 1672041600000
     }
+  ]
+}
 ```
 
 ## 6. 查询资金费率历史
@@ -527,24 +551,22 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 | fundingTime          | int64  | 资金费时间：单位毫秒 |
 
 ```javascript
+{
+  "code":0,
+  "msg":"",
+  "data":[
     {
-        "code": 0,
-        "msg": "",
-        "data": {
-            [
-                {
-                    "symbol": "ETH-USDT",
-                    "fundingRate": "0.3000",
-                    "fundingTime": 1670636800000
-                },
-                {
-                    "symbol": "ETH-USDT",
-                    "fundingRate": "0.3000",
-                    "fundingTime": 1670636400000
-                }
-            ]
-        }
+      "symbol": "BTC-USDT",
+      "fundingRate": "0.0001",
+      "fundingTime": 1585684800000
+    },
+    {
+      "symbol": "BTC-USDT",
+      "fundingRate": "-0.0017",
+      "fundingTime": 1585713600000
     }
+  ]
+}
 ```
 
 ## 7. K线数据
@@ -591,53 +613,53 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 
 **响应**
 
-| 参数名 | 类型  | 描述 |
-| ------------- |----|----|
-| open     | float64 | 开盘价 |
-| close    | float64 | 收盘价 |
-| high     | float64 | 最高价 |
-| low      | float64 | 最低价 |
-| volume   | float64 | 交易数量 |
-| ts       | int64 | k线时间戳，单位毫秒 |
+| 参数名    | 类型  | 描述 |
+|--------|----|----|
+| open   | float64 | 开盘价 |
+| close  | float64 | 收盘价 |
+| high   | float64 | 最高价 |
+| low    | float64 | 最低价 |
+| volume | float64 | 交易数量 |
+| time   | int64 | k线时间戳，单位毫秒 |
 
 ```json
-   {
-      "code":0, 
-      "msg":"",
-      "data":[
-        {
-          "open":"19332.5", 
-          "close":"19336.3", 
-          "high":"19340.6", 
-          "low":"19330.7", 
-          "volume":"92.36", 
-          "time":1666601100000
-        }, 
-        {
-          "open":"19336.8", 
-          "close":"19342.1", 
-          "high":"19343.0", 
-          "low":"19333.6", 
-          "volume":"108.53", 
-          "time":1666601400000
-        }
-      ]
-  }
+{
+  "code": 0,
+  "msg": "",
+  "data": [
+    {
+      "open": "19396.8",
+      "close": "19394.4",
+      "high": "19397.5",
+      "low": "19385.7",
+      "volume": "110.05",
+      "time": 1666583700000
+    },
+    {
+      "open": "19394.4",
+      "close": "19379.0",
+      "high": "19394.4",
+      "low": "19368.3",
+      "volume": "167.44",
+      "time": 1666584000000
+    }
+  ]
+}
 
 如果未发送 startTime 和 endTime,默认返回最新的k线数据
-    
-    {
-      "code": 0, 
-      "msg": "",
-      "data": {
-        "open": "19342.1", 
-        "close": "19342.1", 
-        "high": "19345.7", 
-        "low": "19339.3", 
-        "volume": "26.84", 
-        "time": 1666601700000
-      }
-    }
+
+{
+  "code": 0,
+  "msg": "",
+  "data": {
+      "open": "16879.5",
+      "close": "16877.0",
+      "high": "16880.0",
+      "low": "16876.5",
+      "volume": "428.44",
+      "time": 1672026300000
+  }
+}
 ```
 
 
@@ -664,15 +686,15 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 | time         | int64  | 撮合引擎时间 |
 
 ```javascript
-    {
-        "code": 0,
-        "msg": "",
-        "data": {
-          "openInterest": "10.00",
-          "symbol": "BTC-USDT",
-          "time": 1589437530011,
-        }
-    }
+{
+  "code": 0,
+  "msg": "",
+  "data": {
+    "openInterest": "3289641547.10",
+    "symbol": "BTC-USDT",
+    "time": 1672026617364
+  }
+}
 ```
 
 ## 9. 24小时价格变动情况
@@ -709,60 +731,60 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 | closeTime          | int64  | 24小时内，最后一笔交易的发生时间      |
 
 ```json
-    {
-        "code": 0,
-        "msg": "",
-        "data": {
-          "symbol": "BTC-USDT",
-          "priceChange": "10.00",
-          "priceChangePercent": "10",
-          "lastPrice": "5738.23",
-          "lastVolume": "31.21",
-          "highPrice": "5938.23",
-          "lowPrice": "5238.23",
-          "volume": "23211231.13",
-          "dayVolume": "213124412412.47",
-          "openPrice": "5828.32",
-          "openTime": 16286743974,
-          "closeTime": 16286743974,
-        }
-    }
+{
+  "code": 0,
+  "msg": "",
+  "data": {
+    "symbol": "BTC-USDT",
+    "priceChange": "52.5",
+    "priceChangePercent": "0.31",
+    "lastPrice": "16880.5",
+    "lastQty": "2.2238",
+    "highPrice": "16897.5",
+    "lowPrice": "16726.0",
+    "volume": "245870.1692",
+    "quoteVolume": "4151395117.73",
+    "openPrice": "16832.0",
+    "openTime": 1672026667803,
+    "closeTime": 1672026648425
+  }
+}
 
 或(当不发送交易对信息)
+{
+  "code": 0,
+  "msg": "",
+  "data": [
     {
-      "code": 0, 
-      "msg": "",
-      "data": [
-        {
-          "symbol": "BTC-USDT",
-          "priceChange": "10.00",
-          "priceChangePercent": "10",
-          "lastPrice": "5738.23",
-          "lastVolume": "31.21",
-          "highPrice": "5938.23",
-          "lowPrice": "5238.23",
-          "volume": "23211231.13",
-          "dayVolume": "213124412412.47",
-          "openPrice": "5828.32",
-          "openTime": 16286743974,
-          "closeTime": 16286743974,
-        },
-        {
-          "symbol": "BTC-USDT",
-          "priceChange": "10.00",
-          "priceChangePercent": "10",
-          "lastPrice": "5738.23",
-          "lastVolume": "31.21",
-          "highPrice": "5938.23",
-          "lowPrice": "5238.23",
-          "volume": "23211231.13",
-          "dayVolume": "213124412412.47",
-          "openPrice": "5828.32",
-          "openTime": 16286743974,
-          "closeTime": 16286743974,
-        }
-      ]
+      "symbol": "QNT-USDT",
+      "priceChange": "0.40",
+      "priceChangePercent": "0.38",
+      "lastPrice": "106.39",
+      "lastQty": "0.10",
+      "highPrice": "106.70",
+      "lowPrice": "104.09",
+      "volume": "2350.86",
+      "quoteVolume": "250131.27",
+      "openPrice": "106.00",
+      "openTime": 1672026684857,
+      "closeTime": 1672026262497
+    },
+    {
+      "symbol": "VET-USDT",
+      "priceChange": "-0.00010",
+      "priceChangePercent": "-0.62",
+      "lastPrice": "0.01612",
+      "lastQty": "193",
+      "highPrice": "0.01627",
+      "lowPrice": "0.01593",
+      "volume": "21566781",
+      "quoteVolume": "347658.67",
+      "openPrice": "0.01622",
+      "openTime": 1672026697663,
+      "closeTime": 1672026488862
     }
+  ]
+}
 ```
 
 
@@ -770,7 +792,7 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 
 ## 1. 查询账户信息
 
-- 查询当前账户下专业合约资产的相关信息。
+- 查询当前账户下永续合约资产的相关信息。
 
 **HTTP请求**
              
@@ -791,7 +813,6 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 | ------------- |--------|----|
 | code           | int64  | 错误码，0表示成功，不为0表示异常失败 |
 | msg            | string | 错误信息提示 |
-| userId           | string | 用户ID |
 | asset       | string | 用户资产 |
 | balance        | string | 资产余额 |
 | equity         | string | 资产净值 |
@@ -802,26 +823,27 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 | freezedMargin  | string | 冻结保证金 |
 
 ```javascript
-    {
-        "code": 0,
-        "msg": "",
-        "data": {
-            "userId": "123",
-            "currency": "USDT",
-            "balance": 123.33,
-            "equity": 128.99,
-            "unrealizedProfit": "1.22",
-            "realisedProfit": "8.1",
-            "availableMargin": "123.33",
-            "usedMargin": "2.2",
-            "freezedMargin": "3.3",
-        }
+{
+  "code": 0,
+  "msg": "",
+  "data": {
+    "balance": {
+      "asset": "USDT",
+      "balance": "15.6128",
+      "equity": "15.6128",
+      "unrealizedProfit": "0.0000",
+      "realisedProfit": "0.0000",
+      "availableMargin": "15.6128",
+      "usedMargin": "0.0000",
+      "freezedMargin": "0.0000"
     }
+  }
+}
 ```
 
 ## 2. 查询持仓信息
 
-- 查询当前账户下专业合约的持仓信息与盈亏情况。
+- 查询当前账户下永续合约的持仓信息与盈亏情况。
 
 **HTTP请求**
 
@@ -854,25 +876,25 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 | leverage         | int    | 杠杆                          |
 
 ```javascript
-    {
-       "code": 0,
-       "msg": "",
-       "data": [
-            {
-                "symbol": "BTC-USDT",
-                "positionId": "12345678",
-                "positionSide": "LONG",
-                "isolated": true,
-                "positionAmt": "123.33",
-                "availableAmt": "128.99",
-                "unrealizedProfit": "1.22",
-                "realisedProfit": "8.1",
-                "initialMargin": "123.33",
-                "avgPrice": "2.2",
-                "leverage": 10,
-            }
-        ]
-    }
+{
+   "code": 0,
+   "msg": "",
+   "data": [
+        {
+            "symbol": "BTC-USDT",
+            "positionId": "12345678",
+            "positionSide": "LONG",
+            "isolated": true,
+            "positionAmt": "123.33",
+            "availableAmt": "128.99",
+            "unrealizedProfit": "1.22",
+            "realisedProfit": "8.1",
+            "initialMargin": "123.33",
+            "avgPrice": "2.2",
+            "leverage": 10,
+        }
+    ]
+}
 ```
 
 # 交易接口
@@ -897,7 +919,6 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 | positionSide     | string  | 否    | 持仓方向，且仅可选择 LONG 或 SHORT，默认LONG                                                     |
 | price            | float64 | 否    | 委托价格                                                                               |
 | quantity         | float64 | 否    | 下单数量,使用closePosition不支持此参数。                                                        |
-| closePosition    | string  | 否    | true, false；触发后全部平仓，仅支持STOP_MARKET和TAKE_PROFIT_MARKET；不与quantity合用；自带只平仓效果         |
 | stopPrice        | float64 | 否    | 触发价, 仅 STOP_MARKET,TAKE_PROFIT_MARKET,TRIGGER_LIMIT,TRIGGER_MARKET 需要此参数 |
 | timestamp        | int64   | 是    | 请求的时间戳，单位:毫秒                                                                       |
 | recvWindow       | int64   | 否    | 请求有效时间空窗值, 单位:毫秒                                                                   |
@@ -914,16 +935,13 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 - 条件单的触发必须:
 
   - STOP_MARKET 止损单:
+    - 已挂止损单累加数量不能大于持仓数量
     - 买入: 标记价格高于等于触发价stopPrice
     - 卖出: 标记价格低于等于触发价stopPrice
   - TAKE_PROFIT_MARKET 止盈单:
+    - 已挂止盈单累加数量不能大于持仓数量
     - 买入: 标记价格低于等于触发价stopPrice
     - 卖出: 标记价格高于等于触发价stopPrice
-- STOP_MARKET, TAKE_PROFIT_MARKET 配合 closePosition=true:
-
-  - 条件单触发依照上述条件单触发逻辑
-  - 条件触发后，平掉当时持有所有多头仓位(若为卖单)或当时持有所有空头仓位(若为买单)
-  - 不支持 quantity 参数
 
 **响应**
 
@@ -937,19 +955,19 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 
 
 ```javascript
-    {
-        "code": 0,
-        "msg": "",
-        "data": {
-            "order": {
-                "symbol": "BTC-USDT",
-                "orderId": 1590973236294713344,
-                "side": "BUY",
-                "positionSide": "LONG",
-                "type": "LIMIT"
-            }
+{
+    "code": 0,
+    "msg": "",
+    "data": {
+        "order": {
+            "symbol": "BTC-USDT",
+            "orderId": 1590973236294713344,
+            "side": "BUY",
+            "positionSide": "LONG",
+            "type": "LIMIT"
         }
     }
+}
 ```
 
 ## 2. 批量下单
@@ -998,21 +1016,21 @@ Order对象：
 | orderId       | int64   | 订单号                     |
 
 ```javascript
-    {
-        "code": 0,
-        "msg": "",
-        "data": {
-            "orders": [
-              {
-                "symbol": "BTC-USDT",
-                "orderId": 1590973236294713344,
-                "side": "BUY",
-                "positionSide": "LONG",
-                "type": "LIMIT"
-              }
-            ]
-        }
+{
+    "code": 0,
+    "msg": "",
+    "data": {
+        "orders": [
+          {
+            "symbol": "BTC-USDT",
+            "orderId": 1590973236294713344,
+            "side": "BUY",
+            "positionSide": "LONG",
+            "type": "LIMIT"
+          }
+        ]
     }
+}
 ```
 
 
@@ -1041,20 +1059,16 @@ Order对象：
 | failed     | 结构数组         | 平仓失败的订单号            |
 
 ```javascript
-    {
-        "code": 0,
-        "msg": "",
-        "data" {
-            "success":[725971350,725971354]
-            "failed":[
-              {
-                "orderId": 725971356,
-                "errorCode": 80012,
-                "errorMsg": "Service network failed"
-              },
-            ]
-        }
-    }
+{
+  "code": 0,
+  "msg": "",
+  "data": {
+    "success": [
+      1608667648466354176
+    ],
+    "failed": null
+  }
+}
 ```
 
 ## 4. 撤销订单
@@ -1098,30 +1112,30 @@ Order对象：
 | updateTime    | int64   | 更新时间,单位:毫秒            |
 
 ```javascript
-    {
-        "code": 0,
-        "msg": "",
-        "data": {
-            "order": {
-                "symbol": "BTC-USDT",
-                "orderId": 1590971632183148544,
-                "side": "BUY",
-                "positionSide": "LONG",
-                "type": "LIMIT",
-                "origQty": "0.0010",
-                "price": "3578.4",
-                "executedQty": "0.0000",
-                "avgPrice": "0.0",
-                "cumQuote": "0",
-                "stopPrice": "",
-                "profit": "0.0000",
-                "commission": "0.000000",
-                "status": "CANCELLED",
-                "time": 1668152170593,
-                "updateTime": 1668152170609
-            }
-        }
+{
+  "code": 0,
+  "msg": "",
+  "data": {
+    "order": {
+      "symbol": "LINK-USDT",
+      "orderId": 1597783850786750464,
+      "side": "BUY",
+      "positionSide": "LONG",
+      "type": "TRIGGER_MARKET",
+      "origQty": "5.0",
+      "price": "5.0000",
+      "executedQty": "0.0",
+      "avgPrice": "0.0000",
+      "cumQuote": "0",
+      "stopPrice": "5.0000",
+      "profit": "",
+      "commission": "",
+      "status": "CANCELLED",
+      "time": 1669776330000,
+      "updateTime": 1669776330000
     }
+  }
+}
 ```
 
 ## 5. 批量撤销订单
@@ -1177,39 +1191,33 @@ Order对象：
 | updateTime    | int64   | 更新时间,单位:毫秒            |
 
 ```javascript
-    {
-        "code": 0,
-        "msg": "",
-        "data": {
-          "success": [
-              {
-                "time": 1617939110373,
-                "side": "BUY",
-                "type": "LIMIT",
-                "positionSide": "OPEN",
-                "cumQuote": "45.429",
-                "price": 6.021954,
-                "origQty": 18.098,
-                "status": "FILLED",
-                "stopPrice": "23.445",
-                "avgPrice": 0,
-                "executedQty": 0,
-                "orderId": 6030,
-                "symbol": "BTC-USDT",
-                "profit": 0,
-                "commission": 0,
-                "updateTime": 1617939110373 
-              }
-           ],
-          "failed":[
-            {
-              "orderId": 725971356,
-              "errorCode": 80012,
-              "errorMessage": "Service network failed"
-            },
-          ],
-        }
-    }
+{
+  "code": 0,
+  "msg": "",
+  "data": {
+    "success": [
+      {
+        "symbol": "LINK-USDT",
+        "orderId": 1597783850786750464,
+        "side": "BUY",
+        "positionSide": "LONG",
+        "type": "TRIGGER_MARKET",
+        "origQty": "5.0",
+        "price": "5.5710",
+        "executedQty": "0.0",
+        "avgPrice": "0.0000",
+        "cumQuote": "0",
+        "stopPrice": "5.0000",
+        "profit": "0.0000",
+        "commission": "0.000000",
+        "status": "CANCELLED",
+        "time": 1669776330000,
+        "updateTime": 1672370837000
+      }
+    ],
+    "failed": null
+  }
+}
 ```
 
 ## 6. 撤销全部订单
@@ -1262,51 +1270,33 @@ Order对象：
 | updateTime    | int64   | 更新时间,单位:毫秒            |
 
 ```javascript
-    {
-        "code": 0,
-        "msg": "",
-        "data": {
-            "success": [
-              {
-                "symbol": "BTC-USDT",
-                "orderId": 1590973224571633664,
-                "side": "BUY",
-                "positionSide": "LONG",
-                "type": "LIMIT",
-                "origQty": "0.0010",
-                "price": "3778.4",
-                "executedQty": "0.0000",
-                "avgPrice": "0.0",
-                "cumQuote": "0",
-                "stopPrice": "",
-                "profit": "0",
-                "commission": "0",
-                "status": "CANCELLED",
-                "time": 1668152550000,
-                "updateTime": 1668152550000
-              },
-              {
-                "symbol": "BTC-USDT",
-                "orderId": 1590973236294713344,
-                "side": "BUY",
-                "positionSide": "LONG",
-                "type": "LIMIT",
-                "origQty": "0.0010",
-                "price": "3778.4",
-                "executedQty": "0.0000",
-                "avgPrice": "0.0",
-                "cumQuote": "0",
-                "stopPrice": "",
-                "profit": "0",
-                "commission": "0",
-                "status": "CANCELLED",
-                "time": 1668152553000,
-                "updateTime": 1668152553000
-              }
-            ],
-            "failed": null
-        }
-    }
+{
+  "code": 0,
+  "msg": "",
+  "data": {
+    "success": [
+      {
+        "symbol": "LINK-USDT",
+        "orderId": 1597783835095859200,
+        "side": "BUY",
+        "positionSide": "LONG",
+        "type": "TRIGGER_LIMIT",
+        "origQty": "5.0",
+        "price": "9.0000",
+        "executedQty": "0.0",
+        "avgPrice": "0.0000",
+        "cumQuote": "0",
+        "stopPrice": "9.5000",
+        "profit": "",
+        "commission": "",
+        "status": "NEW",
+        "time": 1669776326000,
+        "updateTime": 1669776326000
+      }
+    ],
+    "failed": null
+  }
+}
 ```
 
 ## 7. 查询当前全部挂单
@@ -1351,32 +1341,50 @@ Order对象：
 | updateTime    | int64   | 更新时间,单位:毫秒            |
 
 ```javascript
+{
+  "code": 0,
+  "msg": "",
+  "data": {
+    "orders": [
       {
-        "code": 0,
-        "msg": "",
-        "data": {
-            "orders": [
-                {
-                  "symbol": "LINK-USDT",
-                  "orderId": 1590551987726843904,
-                  "side": "BUY",
-                  "positionSide": "LONG",
-                  "type": "TRIGGER_MARKET",
-                  "origQty": "5.0",
-                  "price": "7",
-                  "executedQty": "0.0",
-                  "avgPrice": "0",
-                  "cumQuote": "0",
-                  "stopPrice": "5",
-                  "profit": "0.0",
-                  "commission": "0.0",
-                  "status": "NEW",
-                  "time": 1668052119558,
-                  "updateTime": 1668052119558
-                }
-            ]
-       }
+        "symbol": "LINK-USDT",
+        "orderId": 1597783850786750464,
+        "side": "BUY",
+        "positionSide": "LONG",
+        "type": "TRIGGER_MARKET",
+        "origQty": "5.0",
+        "price": "5.0000",
+        "executedQty": "0.0",
+        "avgPrice": "0.0000",
+        "cumQuote": "0",
+        "stopPrice": "5.0000",
+        "profit": "0.0",
+        "commission": "0.0",
+        "status": "NEW",
+        "time": 1669776330000,
+        "updateTime": 1669776330000
+      },
+      {
+        "symbol": "LINK-USDT",
+        "orderId": 1597783835095859200,
+        "side": "BUY",
+        "positionSide": "LONG",
+        "type": "TRIGGER_LIMIT",
+        "origQty": "5.0",
+        "price": "9.0000",
+        "executedQty": "0.0",
+        "avgPrice": "0.0000",
+        "cumQuote": "0",
+        "stopPrice": "9.5000",
+        "profit": "0.0",
+        "commission": "0.0",
+        "status": "NEW",
+        "time": 1669776326000,
+        "updateTime": 1669776326000
       }
+    ]
+  }
+}
  ```
 
 ## 8. 查询订单
@@ -1421,30 +1429,30 @@ Order对象：
 
 
 ```javascript
-    {
-      "code": 0,
-      "msg": "",
-      "data": {
-            "order": {
-                    "symbol": "BTC-USDT",
-                    "orderId": 1590156011467964416,
-                    "side": "SELL",
-                    "positionSide": "SHORT",
-                    "type": "LIMIT",
-                    "origQty": "0.0010",
-                    "price": "18576.0",
-                    "executedQty": "0.0000",
-                    "avgPrice": "0.0",
-                    "cumQuote": "0",
-                    "stopPrice": "",
-                    "profit": "0.0000",
-                    "commission": "0.000000",
-                    "status": "CANCELLED",
-                    "time": 1667957711000,
-                    "updateTime": 1667964321000
-            }
-      }
+{
+  "code": 0,
+  "msg": "",
+  "data": {
+    "order": {
+      "symbol": "BTC-USDT",
+      "orderId": 1597597642269917184,
+      "side": "SELL",
+      "positionSide": "LONG",
+      "type": "TAKE_PROFIT_MARKET",
+      "origQty": "1.0000",
+      "price": "0.0",
+      "executedQty": "0.0000",
+      "avgPrice": "0.0",
+      "cumQuote": "",
+      "stopPrice": "16494.0",
+      "profit": "",
+      "commission": "",
+      "status": "FILLED",
+      "time": 1669731935000,
+      "updateTime": 1669752524000
     }
+  }
+}
 ```
 
 ## 9. 查询逐全仓模式
@@ -1479,13 +1487,13 @@ Order对象：
 | CROSSED    | 全仓 |
 
 ```javascript
-    {
-        "code": 0,
-        "msg": "",
-        "data": {
-            "marginType": "ISOLATED"
-        }
+{
+  "code": 0,
+    "msg": "",
+    "data": {
+      "marginType": "CROSSED"
     }
+}
 ```
 
 ## 10. 变换逐全仓模式
@@ -1516,10 +1524,10 @@ Order对象：
 
 
 ```javascript
-    {
-      "code": 0,
-      "msg": ""
-    }
+{
+  "code": 0,
+  "msg": ""
+}
 ```
 
 ## 11. 查询开仓杠杆
@@ -1548,14 +1556,14 @@ Order对象：
 | shortLeverage | int64 | 空仓杠杆倍数 |
 
 ```javascript
-    {
-      "code": 0,
-      "msg": "",
-      "data": {
-            "longLeverage": 6,
-            "shortLeverage": 7
-      }
-    }
+{
+  "code": 0,
+  "msg": "",
+  "data": {
+    "longLeverage": 6,
+    "shortLeverage": 6
+  }
+}
 ```
 
 ## 12. 调整开仓杠杆
@@ -1586,14 +1594,14 @@ Order对象：
 | symbol   | string | 交易对 |
 
 ```javascript
-    {
-        "code": 0,
-        "msg": "",
-        "data": {
-            "leverage": 6,
-            "symbol": "BTC-USDT" // 交易对
-        }
+{
+    "code": 0,
+    "msg": "",
+    "data": {
+        "leverage": 6,
+        "symbol": "BTC-USDT" // 交易对
     }
+}
 ```
 
 ## 13. 用户强平单历史
@@ -1644,50 +1652,32 @@ Order对象：
 
 
 ```javascript
-    {
-      "code": 0,
-      "msg": "",
-      "data": {
-        "orders": [
-              {
-                "symbol": "BTC-USDT",
-                "orderId": 1580653094914490368,
-                "side": "SELL",
-                "positionSide": "LONG",
-                "type": "MARKET",
-                "origQty": "0.0600",
-                "price": "20798.4",
-                "executedQty": "0.0600",
-                "avgPrice": "20798.3",
-                "cumQuote": "1248",
-                "stopPrice": "",
-                "profit": "-9.5605",
-                "commission": "-0.499161",
-                "status": "FILLED",
-                "time": 1665653919000,
-                "updateTime": 1656063519000
-              },
-              {
-                "symbol": "BTC-USDT",
-                "orderId": 1588829559292166144,
-                "side": "SELL",
-                "positionSide": "LONG",
-                "type": "MARKET",
-                "origQty": "0.0100",
-                "price": "17898.4",
-                "executedQty": "0.0100",
-                "avgPrice": "17898.3",
-                "cumQuote": "179",
-                "stopPrice": "",
-                "profit": "-25.6539",
-                "commission": "-0.071593",
-                "status": "FILLED",
-                "time": 1667641461000,
-                "updateTime": 1667641461000
-              }
-        ]
+{
+  "code": 0,
+  "msg": "",
+  "data": {
+    "orders": [
+      {
+        "symbol": "BTC-USDT",
+        "orderId": 1580653094914490368,
+        "side": "SELL",
+        "positionSide": "LONG",
+        "type": "MARKET",
+        "origQty": "0.0600",
+        "price": "20798.4",
+        "executedQty": "0.0600",
+        "avgPrice": "20798.3",
+        "cumQuote": "1248",
+        "stopPrice": "",
+        "profit": "-9.5605",
+        "commission": "-0.499161",
+        "status": "FILLED",
+        "time": 1665653919000,
+        "updateTime": 1665740319000
       }
-    }
+    ]
+  }
+}
 ```
 
 ## 14. 查询历史订单
@@ -1737,50 +1727,50 @@ Order对象：
 | updateTime    | int64   | 更新时间,单位:毫秒            |
 
 ```javascript
-      {
-          "code": 0,
-          "msg": "",
-          "data": {
-              "orders": [
-                    {
-                      "symbol": "LINK-USDT",
-                      "orderId": 1585839271162413056,
-                      "side": "BUY",
-                      "positionSide": "LONG",
-                      "type": "TRIGGER_MARKET",
-                      "origQty": "5.0",
-                      "price": "9",
-                      "executedQty": "0.0",
-                      "avgPrice": "0",
-                      "cumQuote": "0",
-                      "stopPrice": "5",
-                      "profit": "0.0000",
-                      "commission": "0.000000",
-                      "status": "CANCELLED",
-                      "time": 1667631605000,
-                      "updateTime": 1667631605000
-                    },
-                    {
-                      "symbol": "BTC-USDT",
-                      "orderId": 1588430651630026752,
-                      "side": "SELL",
-                      "positionSide": "SHORT",
-                      "type": "LIMIT",
-                      "origQty": "0.0100",
-                      "price": "20668.0",
-                      "executedQty": "0.0100",
-                      "avgPrice": "20668.0",
-                      "cumQuote": "207",
-                      "stopPrice": "",
-                      "profit": "0.0000",
-                      "commission": "-0.041336",
-                      "status": "FILLED",
-                      "time": 1667546354000,
-                      "updateTime": 1667565512000
-                    }
-              ]
-          }
-      }
+{
+    "code": 0,
+    "msg": "",
+    "data": {
+        "orders": [
+              {
+                "symbol": "LINK-USDT",
+                "orderId": 1585839271162413056,
+                "side": "BUY",
+                "positionSide": "LONG",
+                "type": "TRIGGER_MARKET",
+                "origQty": "5.0",
+                "price": "9",
+                "executedQty": "0.0",
+                "avgPrice": "0",
+                "cumQuote": "0",
+                "stopPrice": "5",
+                "profit": "0.0000",
+                "commission": "0.000000",
+                "status": "CANCELLED",
+                "time": 1667631605000,
+                "updateTime": 1667631605000
+              },
+              {
+                "symbol": "BTC-USDT",
+                "orderId": 1588430651630026752,
+                "side": "SELL",
+                "positionSide": "SHORT",
+                "type": "LIMIT",
+                "origQty": "0.0100",
+                "price": "20668.0",
+                "executedQty": "0.0100",
+                "avgPrice": "20668.0",
+                "cumQuote": "207",
+                "stopPrice": "",
+                "profit": "0.0000",
+                "commission": "-0.041336",
+                "status": "FILLED",
+                "time": 1667546354000,
+                "updateTime": 1667565512000
+              }
+        ]
+    }
+}
 ```
 
 ## 15. 调整逐仓保证金
@@ -1814,10 +1804,10 @@ Order对象：
 | type            | int     | 调整方向 1: 增加逐仓保证金，2: 减少逐仓保证金                |
 
 ```javascript
-    {
-        "code": 0,
-        "msg": "",
-        "amount": 1,
-        "type": 1
-    }
+{
+    "code": 0,
+    "msg": "",
+    "amount": 1,
+    "type": 1
+}
 ```
