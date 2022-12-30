@@ -20,14 +20,14 @@ Bingx开发者文档([English Docs](./Perpetual_Swap_API_Documentation.md))。
   - [查询系统时间](#查询系统时间)
 - [行情接口](#行情接口)
   - [1. 查询合约基础信息](#1-查询合约基础信息)
-  - [2. 查询合约最新价格](#2-查询合约最新价格)
-  - [3. 查询合约交易深度](#3-查询合约交易深度)
-  - [4. 查询最新成交记录](#4-查询最新成交记录)
-  - [5. 查询最新资金费率和标记价格](#5-查询最新资金费率和标记价格)
+  - [2. 最新价格](#2-最新价格)
+  - [3. 深度信息](#3-深度信息)
+  - [4. 近期成交](#4-近期成交)
+  - [5. 最新标记价格和资金费率](#5-最新标记价格和资金费率)
   - [6. 查询资金费率历史](#6-查询资金费率历史)
-  - [7. 查询K线数据](#7-查询k线数据)
-  - [8. 查询合约未平仓数量](#8-查询合约未平仓数量)
-  - [9. 查询合约24小时价格变动情况](#9-查询合约24小时价格变动情况)
+  - [7. K线数据](#7-K线数据)
+  - [8. 获取合约未平仓数](#8-获取合约未平仓数)
+  - [9. 24小时价格变动情况](#9-24小时价格变动情况)
 - [账户接口](#账户接口)
   - [1. 查询账户信息](#1-查询账户信息)
   - [2. 查询持仓信息](#2-查询持仓信息)
@@ -128,7 +128,7 @@ requestBody: side=LONG&leverage=6
 3. 发送请求: curl -H 'X-BX-APIKEY: hO6oQotzTE0S5FRYze2Jx2wGx7eVnJGMolpA1nZyehsoMgCcgKNWQHd4QgTFZuwl4Zt4xMe2PqGBegWXO4A' -X POST 'https://pre-open-api.yunzhonghui.vip/openApi/swap/v2/trade/leverage?symbol=BTC-USDT&timestamp=1668159715051&signature=8b756b01e7a30f02e19c58a91ab01b29528694316b08a51ecb8dd072942bd47d' -d 'side=LONG&leverage=6'
 ```
 
-## 请求交互  
+## 请求交互
 
 REST访问的根URL：`https://open-api.bingx.com`
 
