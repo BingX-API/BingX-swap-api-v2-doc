@@ -210,7 +210,7 @@ To prevent abuse, Bingx imposes rate limits on incoming requests. When a rate li
 **HTTP Requests**
 
   ```http
-    GET /openApi/v2/common/server/time
+    GET /openApi/swap/v2/server/time
   ```
 
 **Request Parameters**

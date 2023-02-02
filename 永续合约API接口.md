@@ -221,7 +221,7 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 **HTTP请求**
 
 ```
-    GET /openApi/v2/common/server/time
+    GET /openApi/swap/v2/server/time
 ```
 
 **参数**
