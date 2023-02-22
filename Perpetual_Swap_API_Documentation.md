@@ -34,6 +34,7 @@ Bingx Developer Documentation
 - [Account Interface](#account-interface)
   - [**1. Get Perpetual Swap Account Asset Information**](#1-get-perpetual-swap-account-asset-information)
   - [**2. Perpetual Swap Positions**](#2-perpetual-swap-positions)
+  - [**3. Get Account Profit and Loss Fund Flow**](#3-get-account-profit-and-loss-fund-flow)
 - [Trade Interface](#trade-interface)
   - [1. Trade order](#1-trade-order)
   - [2. Bulk order](#2-bulk-order)
@@ -50,6 +51,10 @@ Bingx Developer Documentation
   - [13. User's Force Orders](#13-users-force-orders)
   - [14. User's History Orders](#14-users-history-orders)
   - [15. Adjust isolated margin](#15-adjust-isolated-margin)
+- [Other Interface](#other-interface)
+  - [generate Listen Key](#generate-listen-key)
+  - [extend Listen Key Validity period](#extend-listen-key-validity-period)
+  - [delete Listen Key](#delete-listen-key)
 
 <!-- /TOC -->
 
@@ -879,6 +884,87 @@ Get asset information of user‘s Perpetual Account
             "leverage": 10,
         }
     ]
+}
+```
+
+## 3. Get Account Profit and Loss Fund Flow
+
+- Query the capital flow of the perpetual contract under the current account.
+
+**HTTP request**
+
+```
+    GET /openApi/swap/v2/user/income
+```
+
+**parameter**
+
+| parameter name | type | required | description |
+| ------------- |-------|------|----------------------------|
+| symbol | string | No | Trading pair, for example: BTC-USDT, please use capital letters |
+| incomeType | string | No | Income type, see remarks |
+| startTime | int64 | no | start time |
+| endTime | int64 | no | end time |
+| limit | int64 | No | Number of result sets to return Default: 100 Maximum: 1000 |
+| timestamp | int64 | yes | request timestamp in milliseconds |
+| recvWindow | int64 | No | Request valid time window value, unit: millisecond |
+
+**Remark**
+
+| incomeType | Field description |
+|-----------------|-------|
+| TRANSFER | Transfer |
+| REALIZED_PNL | Realized PnL |
+| FUNDING_FEE | Funding Fee |
+| COMMISSION | Fee |
+| INSURANCE_CLEAR | Liquidation |
+| TRIAL_FUND | Trial Fund |
+| ADL | Automatic Deleveraging |
+| SYSTEM_DEDUCTION | System deduction |
+
+- If neither startTime nor endTime is sent, only the data of the last 7 days will be returned.
+- If the incomeType is not sent, return all types of account profit and loss fund flow.
+- Only keep the last 3 months data.
+
+**response**
+
+| parameter name | type | description |
+|------------------|-------|--------------------- |
+| symbol | string | trading pair, for example: BTC-USDT |
+| incomeType | string | money flow type |
+| income | string | The amount of capital flow, positive numbers represent inflows, negative numbers represent outflows |
+| asset | string | asset content |
+| info | string | Remarks, depending on the type of stream |
+| time | int64 | time, unit: millisecond |
+| tranId | string | transfer id |
+| tradeId | string | The original transaction ID that caused the transaction |
+
+```javascript
+{
+  "code": 0,
+  "msg": "",
+  "data": [
+    {
+      "symbol": "BTC-USDT",
+      "incomeType": "COMMISSION",
+      "income": "-0.1030",
+      "asset": "USDT",
+      "info": "Closing Fee",
+      "time": 1676506292000,
+      "tranId": "1676502895030034465_0_83302_COMMISSION",
+      "tradeId": "1676502895030034465_0_83298"
+    },
+    {
+      "symbol": "BTC-USDT",
+      "incomeType": "INSURANCE_CLEAR",
+      "income": "-29.2834",
+      "asset": "USDT",
+      "info": "Strong liquidation",
+      "time": 1676506292000,
+      "tranId": "1676502895030034465_0_83302_PNL",
+      "tradeId": "1676502895030034465_0_83298"
+    }
+  ]
 }
 ```
 
@@ -1785,4 +1871,107 @@ Order object:
   "amount": 1,
   "type": 1
 }
+```
+
+# Other Interface
+
+The base URL of Websocket Market Data is: `wss://open-api-swap.bingx.com/swap-market`
+
+User Data Streams are accessed at `/swap-market?listenKey=`
+
+```
+wss://open-api-swap.bingx.com/swap-market?listenKey=a8ea75681542e66f1a50a1616dd06ed77dab61baa0c296bca03a9b13ee5f2dd7
+```
+
+Use following API to fetch and update listenKey:
+
+## generate Listen Key
+
+listen key Valid for 1 hour
+
+**interface**
+```
+    POST /openApi/user/auth/userDataStream
+```
+
+CURL
+
+```
+curl -X POST 'https://open-api.bingx.com/openApi/user/auth/userDataStream' --header "X-BX-APIKEY:g6ikQYpMiWLecMQ39DUivd4ENem9ygzAim63xUPFhRtCFBUDNLajRoZNiubPemKT"
+
+```
+
+**request header parameters**
+
+| parameter name          | type   | Is it required | Remark         |
+| ------         |--------|----------------|------------|    
+| X-BX-APIKEY    | string | yes            | API KEY |
+
+
+**response**
+
+| parameter name                | type   | Remark     |
+| ------               |--------|------------|    
+| listenKey               | string | listen Key |
+
+
+```
+{"listenKey":"a8ea75681542e66f1a50a1616dd06ed77dab61baa0c296bca03a9b13ee5f2dd7"}
+```
+
+
+## extend Listen Key Validity period
+
+The validity period is extended to 60 minutes after this call, and it is recommended to send a ping every 30 minutes.
+
+**interface**
+```
+    PUT /openApi/user/auth/userDataStream
+```
+
+```
+curl -i -X PUT 'https://open-api.bingx.com/openApi/user/auth/userDataStream?listenKey=d84d39fe78762b39e202ba204bf3f7ebed43bbe7a481299779cb53479ea9677d'
+```
+
+**request parameters**
+
+| parameter name          | type   | Is it required | Remark         |
+| ------         | ------  |----------------|------------|    
+| listenKey   | string  | yes            | listenKey |
+
+
+**response**
+
+```
+http status 200 success
+http status 204 not content
+http status 404 not find key
+```
+
+## delete Listen Key
+
+delete User data flow.
+
+**interface**
+```
+    DELETE /openApi/user/auth/userDataStream
+```
+
+```
+curl -i -X DELETE 'https://open-api.bingx.com/openApi/user/auth/userDataStream?listenKey=d84d39fe78762b39e202ba204bf3f7ebed43bbe7a481299779cb53479ea9677d'
+```
+
+**request parameters**
+
+| parameter name          | type   | Is it required | Remark        |
+| ------         | ------  |----------------|-----------|    
+| listenKey   | string  | yes            | listenKey |
+
+
+**response**
+
+```
+http status 200 success
+http status 204 not content
+http status 404 not find key
 ```

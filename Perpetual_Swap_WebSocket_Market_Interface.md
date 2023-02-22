@@ -15,6 +15,11 @@ Bingx Developer Documentation
   - [1. Subscribe Market Depth Data](#1-subscribe-market-depth-data)
   - [2. Subscribe the Latest Trade Detail](#2-subscribe-the-latest-trade-detail)
   - [3. Subscribe K-Line Data](#3-subscribe-k-line-data)
+- [Websocket account information push](#Websocket-account-information-push)
+  - [listenKey expired push](#1-listenKey-expired-push)
+  - [Account Balance and Position Update Push](#2-Account-Balance-and-Position-Update-Push)
+  - [Order Update Push](#3-Order Update Push)
+  - [Configuration updates such as leverage and margin mode](#4-account-configuration-updates)
 
 <!-- /TOC -->
 
@@ -266,6 +271,165 @@ Confirmation of Unsubscription:
   },
   "s": "BTC-USDT" //trading pair
   "dataType": "BTC-USDT@kline_1m"
+}
+```
+
+# Websocket account information push
+
+Note that obtaining such information requires websocket authentication, use listenKey, and check the [Rest interface document](https://github.com/BingX-API/BingX-swap-api-v2-doc/blob/main/Perpetual_Swap_WebSocket_Market_Interface.md#other-interface)
+
+The websocket interface is `wss://open-api-swap.bingx.com/swap-market`
+
+The stream name of the subscription account data stream is `/swap-market?listenKey=`
+```
+wss://open-api-swap.bingx.com/swap-market?listenKey=a8ea75681542e66f1a50a1616dd06ed77dab61baa0c296bca03a9b13ee5f2dd7
+```
+
+## 1. listenKey expired push
+The user data stream will push this event when the valid listenKey used by the current connection expires.
+
+Notice:
+
+- This event is not necessarily related to the interruption of the websocket connection
+- This message will only be received when the valid listenKey being connected has expired
+- After receiving this message, the user data stream will not be updated until the user uses a new and valid listenKey
+
+**Push data**
+
+```
+{
+    "e":"listenKeyExpired", // event type
+    "E":1676964520421, // event time
+    "listenKey":"53c1067059c5401e216ec0562f4e9741f49c3c18239a743653d844a50c4db6c0" // invalid listenKey
+}
+```
+
+## 2. Account balance and position update push
+
+The event type of the account update event is fixed as ACCOUNT_UPDATE
+
+- When the account information changes, this event will be pushed:
+
+  - This event will only be pushed when there is a change in account information (including changes in funds, positions, etc.);
+    This event will not be pushed if the change in the order status does not cause changes in the account and positions;
+  - position information: push only when there is a change in the symbol position.
+
+- Fund balance changes caused by "FUNDING FEE", only push brief events:
+
+  - When "FUNDING FEE" occurs in a user's cross position, the event ACCOUNT_UPDATE will only push the relevant user's asset balance information B (only push the asset balance information related to the occurrence of FUNDING FEE), and will not push any position information P.
+  - When "FUNDING FEE" occurs in a user's isolated position, the event ACCOUNT_UPDATE will only push the relevant user asset balance information B (only push the asset balance information used by "FUNDING FEE"), and related position information P( Only the position information where this "FUNDING FEE" occurred is pushed), and the rest of the position information will not be pushed.
+- The field "m" represents the reason for the launch of the event, including the following possible types:
+  -DEPOSIT
+  - WITHDRAW
+    -ORDER
+  - FUNDING_FEE
+
+**Push data**
+
+```
+{
+    "e": "ACCOUNT_UPDATE", //event type
+    "E":1676603102163, //event time
+    "T":1676603102163,
+    "a":{ // account update event
+        "m":"ORDER", // event launch reason
+        "B":[ // balance information
+            {
+                "a":"USDT", // asset name
+                "wb":"5277.59264687", // wallet balance
+                "cw":"5233.21709203", // Wallet balance excluding isolated margin
+                "bc":"0" // wallet balance change amount
+            }
+        ],
+        "P":[
+            {
+                "s":"LINK-USDT", // trading pair
+                "pa":"108.84300000", // position
+                "ep":"7.25620000", // entry price
+                "up": "1.42220000", // unrealized profit and loss of positions
+                "mt":"isolated", // margin mode
+                "iw": "23.19081642", // If it is an isolated position, the position margin
+                "ps":"SHORT" // position direction
+            }
+        ]
+    }
+}
+```
+
+## 3. Order update push
+
+This type of event will be pushed when a new order is created, an order has a new deal, or a new status change. The event type is unified as ORDER_TRADE_UPDATE
+
+order direction
+- BUY buy
+- SELL sell
+
+
+Order Type
+- MARKET market order
+- LIMIT limit order
+- STOP stop loss order
+- TAKE_PROFIT take profit order
+- LIQUIDATION strong liquidation order
+
+The specific execution type of this event
+- NEW
+- CANCELED removed
+- CALCULATED order ADL or liquidation
+- EXPIRED order lapsed
+- TRADE transaction
+
+Order Status
+- NEW
+- PARTIALLY_FILLED
+- FILLED
+- CANCELED
+- EXPIRED
+
+**Push data**
+
+```
+{
+    "e":"ORDER_TRADE_UPDATE", // event type
+    "E":1676973375161, // event time
+    "o": { //
+        "s":"LINK-USDT", // trading pair
+        "c":"", // client custom order ID
+        "i":1627970445070303232, // Order ID
+        "S":"SELL", // order direction
+        "o":"MARKET", // order type
+        "q":"5.00000000", // order quantity
+        "p":"7.82700000", // order price
+        "ap":"7.82690000", // order average price
+        "x":"TRADE", // The specific execution type of this event
+        "X":"FILLED", // current status of the order
+        "N":"USDT", // Fee asset type
+        "n":"-0.01369708", // handling fee
+        "T":1676973375149, // transaction time
+        "wt": "MARK_PRICE", // trigger price type: MARK_PRICE mark price, CONTRACT_PRICE latest price, INDEX_PRICE index price
+        "ps":"SHORT", // Position direction: LONG or SHORT
+        "rp":"0.00000000" // The transaction achieves profit and loss
+    }
+}
+```
+
+## 4. Configuration updates such as leverage and margin mode
+When the account configuration changes, the event type will be pushed as ACCOUNT_CONFIG_UPDATE
+
+When the leverage of a trading pair changes, the push message will contain the object ac, which represents the account configuration of the trading pair, where s represents the specific trading pair, l represents the leverage of long positions, S represents the leverage of short positions, and mt represents the margin mode.
+
+**Push data**
+
+```
+{
+    "e":"ACCOUNT_CONFIG_UPDATE", // event type
+    "E":1676878489992, // event time
+    "ac":{
+        "s": "BTC-USDT", // trading pair
+        "l":12, // long position leverage
+        "S":9, // long position leverage
+        "mt":"cross" // margin mode
+    }
 }
 ```
 

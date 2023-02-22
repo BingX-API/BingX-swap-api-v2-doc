@@ -32,6 +32,7 @@ Bingx开发者文档([English Docs](./Perpetual_Swap_API_Documentation.md))。
 - [账户接口](#账户接口)
   - [1. 查询账户信息](#1-查询账户信息)
   - [2. 查询持仓信息](#2-查询持仓信息)
+  - [3. 获取账户损益资金流水](#3-获取账户损益资金流水)
 - [交易接口](#交易接口)
   - [1. 交易下单](#1-交易下单)
   - [2. 批量下单](#2-批量下单)
@@ -48,6 +49,10 @@ Bingx开发者文档([English Docs](./Perpetual_Swap_API_Documentation.md))。
   - [13. 用户强平单历史](#13-用户强平单历史)
   - [14. 查询历史订单](#14-查询历史订单)
   - [15. 调整逐仓保证金](#15-调整逐仓保证金)
+- [其他接口](#其他接口)
+  - [生成ListenKey](#生成-Listen-Key)
+  - [延长ListenKey有效期](#延长-Listen-Key-有效期)
+  - [关闭ListenKey](#关闭-Listen-Key)
 
 
 <!-- /TOC -->
@@ -894,6 +899,87 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
             "leverage": 10,
         }
     ]
+}
+```
+
+## 3. 获取账户损益资金流水
+
+- 查询当前账户下永续合约的资金流水。
+
+**HTTP请求**
+
+```
+    GET /openApi/swap/v2/user/income
+```
+
+**参数**
+
+| 参数名 | 类型     | 是否必填 | 描述                         |
+| ------------- |--------|------|----------------------------|
+| symbol | string | 否    | 交易对, 例如: BTC-USDT, 请使用大写字母 |
+| incomeType | string | 否    | 收益类型,见备注                   |
+| startTime | int64  | 否    | 开始时间                       |
+| endTime | int64  | 否    | 结束时间                       |
+| limit | int64  | 否    | 返回的结果集数量 默认值:100 最大值:1000         |
+| timestamp | int64  | 是    | 请求的时间戳，单位为毫秒               |
+| recvWindow       | int64  | 否    | 请求有效时间空窗值, 单位:毫秒           |
+
+**备注**
+
+| incomeType      | 字段说明  |
+|-----------------|-------|
+| TRANSFER        | 转账    |
+| REALIZED_PNL    | 已实现盈亏 |
+| FUNDING_FEE     | 资金费用  |
+| COMMISSION      | 手续费   |
+| INSURANCE_CLEAR | 强平    |
+| TRIAL_FUND      | 体验金   |
+| ADL             | 自动减仓  |
+| SYSTEM_DEDUCTION | 系统扣除  |
+
+- 如果startTime 和 endTime 均未发送, 只会返回最近7天的数据。
+- 如果incomeType没有发送，返回所有类型账户损益资金流水。
+- 仅保留最近3个月的数据。
+
+**响应**
+
+| 参数名              | 类型     | 描述                  |
+|------------------|--------|---------------------|
+| symbol           | string | 交易对, 例如: BTC-USDT   |
+| incomeType       | string | 资金流类型               |
+| income     | string | 资金流数量，正数代表流入，负数代表流出 |
+| asset         | string | 资产内容                |
+| info      | string | 备注信息，取决于流水类型        |
+| time     | int64  | 时间，单位：毫秒            |
+| tranId | string | 划转id                |
+| tradeId   | string | 引起流水产生的原始交易ID       |
+
+```javascript
+{
+  "code": 0,
+  "msg": "",
+  "data": [
+    {
+      "symbol": "BTC-USDT",
+      "incomeType": "COMMISSION",
+      "income": "-0.1030",
+      "asset": "USDT",
+      "info": "平仓手续费",
+      "time": 1676506292000,
+      "tranId": "1676502895030034465_0_83302_COMMISSION",
+      "tradeId": "1676502895030034465_0_83298"
+    },
+    {
+      "symbol": "BTC-USDT",
+      "incomeType": "INSURANCE_CLEAR",
+      "income": "-29.2834",
+      "asset": "USDT",
+      "info": "强平平空",
+      "time": 1676506292000,
+      "tranId": "1676502895030034465_0_83302_PNL",
+      "tradeId": "1676502895030034465_0_83298"
+    }
+  ]
 }
 ```
 
@@ -1810,4 +1896,106 @@ Order对象：
     "amount": 1,
     "type": 1
 }
+```
+
+# 其他接口
+
+websocket接口是 `wss://open-api-swap.bingx.com/swap-market`
+
+订阅账户数据流的stream名称为 `/swap-market?listenKey=`
+```
+wss://open-api-swap.bingx.com/swap-market?listenKey=a8ea75681542e66f1a50a1616dd06ed77dab61baa0c296bca03a9b13ee5f2dd7
+```
+
+listenKey 获取方式如下：
+
+## 生成 Listen Key
+
+listen key的有效时间为1小时
+
+**接口**
+```
+    POST /openApi/user/auth/userDataStream
+```
+
+CURL
+
+```
+curl -X POST 'https://open-api.bingx.com/openApi/user/auth/userDataStream' --header "X-BX-APIKEY:g6ikQYpMiWLecMQ39DUivd4ENem9ygzAim63xUPFhRtCFBUDNLajRoZNiubPemKT"
+
+```
+
+**请求头参数**
+
+| 参数名          | 类型     | 是否必填 | 备注         |
+| ------         | ------  | ------  |------------|    
+| X-BX-APIKEY    | string  | 是      | 请求的API KEY |
+
+
+**响应**
+
+| 参数名                | 类型     | 备注  |
+| ------               |--------|-----|    
+| listenKey               | string | 返回的 |
+
+
+```
+{"listenKey":"a8ea75681542e66f1a50a1616dd06ed77dab61baa0c296bca03a9b13ee5f2dd7"}
+```
+
+
+## 延长 Listen Key 有效期
+
+有效期延长至本次调用后60分钟,建议每30分钟发送一个 ping 。
+
+**接口**
+```
+    PUT /openApi/user/auth/userDataStream
+```
+
+```
+curl -i -X PUT 'https://open-api.bingx.com/openApi/user/auth/userDataStream?listenKey=d84d39fe78762b39e202ba204bf3f7ebed43bbe7a481299779cb53479ea9677d'
+```
+
+**请求参数**
+
+| 参数名          | 类型     | 是否必填 | 备注         |
+| ------         | ------  | ------  |------------|    
+| listenKey   | string  | 是      | 返回的listenKey |
+
+
+**响应**
+
+```
+http status 200 成功
+http status 204 没有请求参数
+http status 404 没有这个listenKey
+```
+
+## 关闭 Listen Key
+
+关闭用户数据流。
+
+**接口**
+```
+    DELETE /openApi/user/auth/userDataStream
+```
+
+```
+curl -i -X DELETE 'https://open-api.bingx.com/openApi/user/auth/userDataStream?listenKey=d84d39fe78762b39e202ba204bf3f7ebed43bbe7a481299779cb53479ea9677d'
+```
+
+**请求参数**
+
+| 参数名          | 类型     | 是否必填 | 备注         |
+| ------         | ------  | ------  |------------|    
+| listenKey   | string  | 是      | 请求的API KEY |
+
+
+**响应**
+
+```
+http status 200 成功
+http status 204 没有请求参数
+http status 404 没有这个listenKey
 ```
