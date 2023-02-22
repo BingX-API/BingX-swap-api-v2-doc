@@ -18,7 +18,7 @@ Bingx Developer Documentation
 - [Websocket account information push](#Websocket-account-information-push)
   - [listenKey expired push](#1-listenKey-expired-push)
   - [Account Balance and Position Update Push](#2-Account-Balance-and-Position-Update-Push)
-  - [Order Update Push](#3-Order Update Push)
+  - [Order Update Push](#3-Order-update-push)
   - [Configuration updates such as leverage and margin mode](#4-account-configuration-updates)
 
 <!-- /TOC -->
@@ -276,7 +276,7 @@ Confirmation of Unsubscription:
 
 # Websocket account information push
 
-Note that obtaining such information requires websocket authentication, use listenKey, and check the [Rest interface document](https://github.com/BingX-API/BingX-swap-api-v2-doc/blob/main/Perpetual_Swap_WebSocket_Market_Interface.md#other-interface)
+Note that obtaining such information requires websocket authentication, use listenKey, and check the [Rest interface document](https://github.com/BingX-API/BingX-swap-api-v2-doc/blob/main/Perpetual_Swap_API_Documentation.md#other-interface)
 
 The websocket interface is `wss://open-api-swap.bingx.com/swap-market`
 

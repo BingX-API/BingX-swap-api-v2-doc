@@ -18,7 +18,7 @@ Bingx开发者文档([English Docs](./Perpetual_Swap_WebSocket_Market_Interface.
   - [listenKey过期推送](#1-listenKey过期推送)
   - [账户余额和仓位更新推送](#2-账户余额和仓位更新推送)
   - [订单更新推送](#3-订单更新推送)
-  - [杠杆倍数和保证金模式等配置更新推送](#4-账户配置更新推送)
+  - [杠杆倍数等配置更新推送](#4-账户配置更新推送)
 
 <!-- /TOC -->
 
@@ -264,7 +264,7 @@ WebSocket 行情接口返回的所有数据都进行了 GZIP 压缩，需要 cli
 
 # Websocket 账户信息推送
 
-注意需要获取此类信息需要 websocket 鉴权，使用 listenKey，详细方式查看 [Rest 接口文档](https://github.com/BingX-API/BingX-swap-api-v2-doc/blob/main/%E4%B8%93%E4%B8%9A%E5%90%88%E7%BA%A6API%E6%8E%A5%E5%8F%A3.md#%E5%85%B6%E4%BB%96%E6%8E%A5%E5%8F%A3)
+注意需要获取此类信息需要 websocket 鉴权，使用 listenKey，详细方式查看 [Rest 接口文档](https://github.com/BingX-API/BingX-swap-api-v2-doc/blob/main/%E6%B0%B8%E7%BB%AD%E5%90%88%E7%BA%A6API%E6%8E%A5%E5%8F%A3.md#%E5%85%B6%E4%BB%96%E6%8E%A5%E5%8F%A3)
 
 websocket接口是 `wss://open-api-swap.bingx.com/swap-market`
 
@@ -401,7 +401,7 @@ wss://open-api-swap.bingx.com/swap-market?listenKey=a8ea75681542e66f1a50a1616dd0
 }
 ```
 
-## 4. 杠杆倍数和保证金模式等配置更新推送
+## 4. 杠杆倍数等配置更新推送
 当账户配置发生变化时会推送此类事件类型统一为 ACCOUNT_CONFIG_UPDATE
 
 当交易对杠杆倍数发生变化时推送消息体会包含对象ac表示交易对账户配置，其中s代表具体的交易对，l代表多仓杠杆倍数，S代表空仓杠杆倍数，mt代表保证金模式。

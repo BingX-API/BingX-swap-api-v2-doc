@@ -42,7 +42,7 @@ Bingx Developer Documentation
   - [4. Cancel an Order](#4-cancel-an-order)
   - [5. Cancel a Batch of Orders](#5-cancel-a-batch-of-orders)
   - [6. Cancel All Orders](#6-cancel-all-orders)
-  - [7. Query all current pending orders](#7-query-all current-pending-orders)
+  - [7. Query pending orders](#7-query-all-current-pending-orders)
   - [8. Query Order](#8-query-order)
   - [9. Query Margin Mode](#9-query-margin-mode)
   - [10. Switch Margin Mode](#10-switch-margin-mode)
@@ -1366,7 +1366,7 @@ Order object:
 }
 ```
 
-## 7. Query all current pending orders
+## 7. Query pending orders
 
 - Query all orders that the user is currently entrusted with.
 
