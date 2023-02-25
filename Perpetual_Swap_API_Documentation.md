@@ -916,7 +916,7 @@ Get asset information of user‘s Perpetual Account
 | TRANSFER | Transfer |
 | REALIZED_PNL | Realized PnL |
 | FUNDING_FEE | Funding Fee |
-| COMMISSION | Fee |
+| TRADING_FEE | Fee |
 | INSURANCE_CLEAR | Liquidation |
 | TRIAL_FUND | Trial Fund |
 | ADL | Automatic Deleveraging |
@@ -946,7 +946,7 @@ Get asset information of user‘s Perpetual Account
   "data": [
     {
       "symbol": "BTC-USDT",
-      "incomeType": "COMMISSION",
+      "incomeType": "TRADING_FEE",
       "income": "-0.1030",
       "asset": "USDT",
       "info": "Closing Fee",

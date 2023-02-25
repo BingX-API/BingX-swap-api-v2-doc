@@ -931,7 +931,7 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 | TRANSFER        | 转账    |
 | REALIZED_PNL    | 已实现盈亏 |
 | FUNDING_FEE     | 资金费用  |
-| COMMISSION      | 手续费   |
+| TRADING_FEE      | 手续费   |
 | INSURANCE_CLEAR | 强平    |
 | TRIAL_FUND      | 体验金   |
 | ADL             | 自动减仓  |
@@ -961,7 +961,7 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
   "data": [
     {
       "symbol": "BTC-USDT",
-      "incomeType": "COMMISSION",
+      "incomeType": "TRADING_FEE",
       "income": "-0.1030",
       "asset": "USDT",
       "info": "平仓手续费",
