@@ -990,7 +990,7 @@ Get asset information of user‘s Perpetual Account
 | side | string | yes | buying and selling direction SELL, BUY |
 | positionSide | string | No | Position direction, and only LONG or SHORT can be selected, the default is LONG |
 | price | float64 | no | entrusted price |
-| quantity | float64 | No | The order quantity, this parameter is not supported when using closePosition. |
+| quantity | float64 | No | The order quantity |
 | stopPrice | float64 | No | Trigger price, only required for STOP_MARKET, TAKE_PROFIT_MARKET, TRIGGER_LIMIT, TRIGGER_MARKET |
 | timestamp | int64 | yes | request timestamp, unit: millisecond |
 | recvWindow | int64 | No | Request valid time window value, unit: millisecond |
@@ -1070,8 +1070,7 @@ Order object:
 | side | string | yes | trade direction, (BUY/SELL buy/sell) |
 | positionSide | string | No | Position direction, and only LONG or SHORT can be selected, the default is LONG |
 | price | float64 | no | entrusted price |
-| quantity | float64 | No | The order quantity, this parameter is not supported when using closePosition. |
-| closePosition | string | No | true, false; all positions will be closed after the trigger, only STOP_MARKET and TAKE_PROFIT_MARKET are supported; not used with quantity; it comes with a position-only effect |
+| quantity | float64 | No | The order quantity|
 | stopPrice | float64 | No | Stop profit and stop loss, plan order, trigger price, only STOP_MARKET, TAKE_PROFIT_MARKET,TRIGGER |
 
 - Specific order conditions and rules are consistent with ordinary orders

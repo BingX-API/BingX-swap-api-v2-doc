@@ -1004,7 +1004,7 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 | side             | string  | 是    | 买卖方向 SELL, BUY                                                                     |
 | positionSide     | string  | 否    | 持仓方向，且仅可选择 LONG 或 SHORT，默认LONG                                                     |
 | price            | float64 | 否    | 委托价格                                                                               |
-| quantity         | float64 | 否    | 下单数量,使用closePosition不支持此参数。                                                        |
+| quantity         | float64 | 否    | 下单数量                                                     |
 | stopPrice        | float64 | 否    | 触发价, 仅 STOP_MARKET,TAKE_PROFIT_MARKET,TRIGGER_LIMIT,TRIGGER_MARKET 需要此参数 |
 | timestamp        | int64   | 是    | 请求的时间戳，单位:毫秒                                                                       |
 | recvWindow       | int64   | 否    | 请求有效时间空窗值, 单位:毫秒                                                                   |
@@ -1084,8 +1084,7 @@ Order对象：
 | side             | string  | 是    | 交易方向, (BUY/SELL 买/卖)                                                       |
 | positionSide     | string  | 否    | 持仓方向，且仅可选择 LONG 或 SHORT，默认LONG                                                     |
 | price            | float64 | 否    | 委托价格                                                                       |
-| quantity         | float64 | 否    | 下单数量,使用closePosition不支持此参数。                                                |
-| closePosition    | string  | 否    | true, false；触发后全部平仓，仅支持STOP_MARKET和TAKE_PROFIT_MARKET；不与quantity合用；自带只平仓效果 |
+| quantity         | float64 | 否    | 下单数量                                               |
 | stopPrice        | float64 | 否    | 止盈止损，计划委托，触发价, 仅 STOP_MARKET, TAKE_PROFIT_MARKET,TRIGGER                   |
 
 - 具体订单条件规则，与普通下单一致
