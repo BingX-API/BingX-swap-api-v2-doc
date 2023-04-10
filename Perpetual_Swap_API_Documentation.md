@@ -994,6 +994,7 @@ Get asset information of user‘s Perpetual Account
 | stopPrice | float64 | No | Trigger price, only required for STOP_MARKET, TAKE_PROFIT_MARKET, TRIGGER_LIMIT, TRIGGER_MARKET |
 | timestamp | int64 | yes | request timestamp, unit: millisecond |
 | recvWindow | int64 | No | Request valid time window value, unit: millisecond |
+| timeInForce | string | No | Time in Force, currently only supports PostOnly  |
 
 Depending on the order type, certain parameters are mandatory:
 

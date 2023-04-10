@@ -1008,6 +1008,7 @@ HTTP状态码200表示成功响应，并可能包含内容。如果响应含有�
 | stopPrice        | float64 | 否    | 触发价, 仅 STOP_MARKET,TAKE_PROFIT_MARKET,TRIGGER_LIMIT,TRIGGER_MARKET 需要此参数 |
 | timestamp        | int64   | 是    | 请求的时间戳，单位:毫秒                                                                       |
 | recvWindow       | int64   | 否    | 请求有效时间空窗值, 单位:毫秒                                                                   |
+| timeInForce      | string  | 否    | 有效方式，目前仅支持PostOnly                                                                   |
 
 基于订单 type 不同，强制要求某些参数:
 
