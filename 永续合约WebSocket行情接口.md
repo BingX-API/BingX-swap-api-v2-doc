@@ -397,6 +397,7 @@ wss://open-api-swap.bingx.com/swap-market?listenKey=a8ea75681542e66f1a50a1616dd0
         "wt":"MARK_PRICE",        // 触发价类型：MARK_PRICE 标记价格，CONTRACT_PRICE 最新价格，INDEX_PRICE 指数价格
         "ps":"SHORT",             // 持仓方向：LONG or SHORT
         "rp":"0.00000000"         // 该交易实现盈亏
+        "z":"0.00000000"          // 订单累计已成交量
     }
 }
 ```

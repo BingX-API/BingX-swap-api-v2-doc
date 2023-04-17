@@ -409,6 +409,7 @@ Order Status
         "wt": "MARK_PRICE", // trigger price type: MARK_PRICE mark price, CONTRACT_PRICE latest price, INDEX_PRICE index price
         "ps":"SHORT", // Position direction: LONG or SHORT
         "rp":"0.00000000" // The transaction achieves profit and loss
+        "z": "0.00000000" // Order Filled Accumulated Quantity
     }
 }
 ```
